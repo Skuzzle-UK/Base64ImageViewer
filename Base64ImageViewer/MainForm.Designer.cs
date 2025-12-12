@@ -28,16 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             splitContainer1 = new SplitContainer();
             inputImage = new TextBox();
             panel1 = new Panel();
+            copyButton = new Button();
             saveButton = new Button();
             viewButton = new Button();
-            copyButton = new Button();
             panel2 = new Panel();
-            imageDisplay = new PictureBox();
             loadButton = new Button();
+            imageDisplay = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -81,6 +82,7 @@
             inputImage.TabIndex = 0;
             inputImage.Text = resources.GetString("inputImage.Text");
             inputImage.TextChanged += inputImage_TextChanged;
+            inputImage.KeyDown += inputImage_KeyDown;
             // 
             // panel1
             // 
@@ -93,6 +95,17 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(477, 50);
             panel1.TabIndex = 2;
+            // 
+            // copyButton
+            // 
+            copyButton.Location = new Point(372, 16);
+            copyButton.Margin = new Padding(2);
+            copyButton.Name = "copyButton";
+            copyButton.Size = new Size(78, 20);
+            copyButton.TabIndex = 3;
+            copyButton.Text = "Copy";
+            copyButton.UseVisualStyleBackColor = true;
+            copyButton.Click += copyButton_Click;
             // 
             // saveButton
             // 
@@ -115,18 +128,7 @@
             viewButton.Text = "View";
             viewButton.UseVisualStyleBackColor = true;
             viewButton.Click += viewButton_Click;
-            //
-            // copyButton
-            //
-            copyButton.Location = new Point(228, 16);
-            copyButton.Margin = new Padding(2);
-            copyButton.Name = "copyButton";
-            copyButton.Size = new Size(78, 20);
-            copyButton.TabIndex = 3;
-            copyButton.Text = "Copy";
-            copyButton.UseVisualStyleBackColor = true;
-            copyButton.Click += copyButton_Click;
-            //
+            // 
             // panel2
             // 
             panel2.Controls.Add(loadButton);
@@ -135,6 +137,16 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(952, 50);
             panel2.TabIndex = 1;
+            // 
+            // loadButton
+            // 
+            loadButton.Location = new Point(28, 15);
+            loadButton.Name = "loadButton";
+            loadButton.Size = new Size(75, 23);
+            loadButton.TabIndex = 0;
+            loadButton.Text = "Load";
+            loadButton.UseVisualStyleBackColor = true;
+            loadButton.Click += loadButton_Click;
             // 
             // imageDisplay
             // 
@@ -146,16 +158,6 @@
             imageDisplay.SizeMode = PictureBoxSizeMode.Zoom;
             imageDisplay.TabIndex = 0;
             imageDisplay.TabStop = false;
-            //
-            // loadButton
-            //
-            loadButton.Location = new Point(845, 13);
-            loadButton.Name = "loadButton";
-            loadButton.Size = new Size(75, 23);
-            loadButton.TabIndex = 0;
-            loadButton.Text = "Load";
-            loadButton.UseVisualStyleBackColor = true;
-            loadButton.Click += loadButton_Click;
             // 
             // MainForm
             // 

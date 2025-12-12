@@ -151,6 +151,19 @@ public partial class MainForm : Form
         }
     }
 
+    private void inputImage_KeyDown(object sender, KeyEventArgs e)
+    {
+        bool isPaste = (e.Control && e.KeyCode == Keys.V) || (e.Shift && e.KeyCode == Keys.Insert);
+        if (isPaste && Clipboard.ContainsText())
+        {
+            e.Handled = true;
+            e.SuppressKeyPress = true;
+
+            string clipboardText = Clipboard.GetText();
+            SetBase64Content(clipboardText);
+        }
+    }
+
     private void copyButton_Click(object sender, EventArgs e)
     {
         string content = CurrentBase64;
