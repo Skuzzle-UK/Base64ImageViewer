@@ -13,7 +13,39 @@ public partial class MainForm : Form
     public MainForm()
     {
         InitializeComponent();
+        SetupInputContextMenu();
         DisplayImage();
+    }
+
+    private void SetupInputContextMenu()
+    {
+        var contextMenu = new ContextMenuStrip();
+
+        var pasteItem = new ToolStripMenuItem("Paste", null, (s, e) =>
+        {
+            if (Clipboard.ContainsText())
+            {
+                SetBase64Content(Clipboard.GetText());
+            }
+        });
+
+        var copyItem = new ToolStripMenuItem("Copy", null, (s, e) =>
+        {
+            if (inputImage.SelectionLength > 0)
+                Clipboard.SetText(inputImage.SelectedText);
+        });
+
+        var selectAllItem = new ToolStripMenuItem("Select All", null, (s, e) =>
+        {
+            inputImage.SelectAll();
+        });
+
+        contextMenu.Items.Add(copyItem);
+        contextMenu.Items.Add(pasteItem);
+        contextMenu.Items.Add(new ToolStripSeparator());
+        contextMenu.Items.Add(selectAllItem);
+
+        inputImage.ContextMenuStrip = contextMenu;
     }
 
     private void viewButton_Click(object sender, EventArgs e)
@@ -59,7 +91,7 @@ public partial class MainForm : Form
         try
         {
             Image image = Base64ToImage(CurrentBase64);
-            if(image is null)
+            if (image is null)
             {
                 return;
             }

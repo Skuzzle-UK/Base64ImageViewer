@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             splitContainer1 = new SplitContainer();
             inputImage = new TextBox();
@@ -39,6 +38,7 @@
             panel2 = new Panel();
             loadButton = new Button();
             imageDisplay = new PictureBox();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -131,6 +131,7 @@
             // 
             // panel2
             // 
+            panel2.Controls.Add(label1);
             panel2.Controls.Add(loadButton);
             panel2.Dock = DockStyle.Bottom;
             panel2.Location = new Point(0, 638);
@@ -159,6 +160,15 @@
             imageDisplay.TabIndex = 0;
             imageDisplay.TabStop = false;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(122, 19);
+            label1.Name = "label1";
+            label1.Size = new Size(793, 15);
+            label1.TabIndex = 1;
+            label1.Text = "Some images are too large to fit in the text input. If you paste them view will work. To copy the base64 text of an image too large use the copy button.";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -175,6 +185,7 @@
             splitContainer1.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)imageDisplay).EndInit();
             ResumeLayout(false);
         }
@@ -190,5 +201,6 @@
         private PictureBox imageDisplay;
         private Panel panel2;
         private Button loadButton;
+        private Label label1;
     }
 }
