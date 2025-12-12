@@ -4,6 +4,12 @@ namespace Base64ImageViewer;
 
 public partial class MainForm : Form
 {
+    private const int MaxDisplayLength = 100000;
+    private string? _fullBase64String;
+    private bool _isSettingText;
+
+    private string CurrentBase64 => _fullBase64String ?? inputImage.Text;
+
     public MainForm()
     {
         InitializeComponent();
@@ -22,7 +28,7 @@ public partial class MainForm : Form
 
     private void DisplayImage()
     {
-        imageDisplay.Image = Base64ToImage(inputImage.Text);
+        imageDisplay.Image = Base64ToImage(CurrentBase64);
     }
 
     private Image Base64ToImage(string base64String)
@@ -44,7 +50,7 @@ public partial class MainForm : Form
 
     private void saveButton_Click(object sender, EventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(inputImage.Text))
+        if (string.IsNullOrWhiteSpace(CurrentBase64))
         {
             MessageBox.Show($"Input string is not valid base64 image", "Base64ImageViewer Error");
             return;
@@ -52,7 +58,7 @@ public partial class MainForm : Form
 
         try
         {
-            Image image = Base64ToImage(inputImage.Text);
+            Image image = Base64ToImage(CurrentBase64);
             if(image is null)
             {
                 return;
@@ -87,5 +93,74 @@ public partial class MainForm : Form
         {
             MessageBox.Show($"Failed to save image: {ex}", "Base64ImageViewer Error");
         }
+    }
+
+    private void loadButton_Click(object sender, EventArgs e)
+    {
+        using (OpenFileDialog openFileDialog = new OpenFileDialog())
+        {
+            openFileDialog.Filter = "Image Files|*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tiff;*.tif;*.ico|PNG Image|*.png|JPEG Image|*.jpg;*.jpeg|Bitmap Image|*.bmp|GIF Image|*.gif|TIFF Image|*.tiff;*.tif|Icon|*.ico|All Files|*.*";
+            openFileDialog.Title = "Select an Image File";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    byte[] imageBytes = File.ReadAllBytes(openFileDialog.FileName);
+                    string base64String = Convert.ToBase64String(imageBytes);
+
+                    SetBase64Content(base64String);
+                    DisplayImage();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to load image: {ex.Message}", "Base64ImageViewer Error");
+                }
+            }
+        }
+    }
+
+    private void SetBase64Content(string base64String)
+    {
+        _isSettingText = true;
+        try
+        {
+            if (base64String.Length > MaxDisplayLength)
+            {
+                _fullBase64String = base64String;
+                inputImage.Text = base64String.Substring(0, MaxDisplayLength) +
+                    $"\r\n\r\n[... TRUNCATED - Total length: {base64String.Length:N0} characters. Use 'Copy' button for full content ...]";
+            }
+            else
+            {
+                _fullBase64String = null;
+                inputImage.Text = base64String;
+            }
+        }
+        finally
+        {
+            _isSettingText = false;
+        }
+    }
+
+    private void inputImage_TextChanged(object sender, EventArgs e)
+    {
+        if (!_isSettingText)
+        {
+            _fullBase64String = null;
+        }
+    }
+
+    private void copyButton_Click(object sender, EventArgs e)
+    {
+        string content = CurrentBase64;
+        if (string.IsNullOrWhiteSpace(content))
+        {
+            MessageBox.Show("No content to copy.", "Base64ImageViewer");
+            return;
+        }
+
+        Clipboard.SetText(content);
+        MessageBox.Show($"Copied {content.Length:N0} characters to clipboard.", "Base64ImageViewer");
     }
 }
